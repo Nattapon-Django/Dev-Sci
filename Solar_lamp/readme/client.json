@@ -1,0 +1,1980 @@
+[
+    {
+        "id": "7b43875409fb364b",
+        "type": "tab",
+        "label": "Client",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "c121357dfc5f7bdf",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "DB",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"en-us\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nmsg.payload = {\n\n    t: parseInt(data[0]),\n    t2: parseInt(data[1]),\n    t3: parseInt(data[2]),\n    date : msg.payload1,\n    time:msg.payload2\n\n}\nmsg.payload.dhtT=parseInt(data[0]);\nmsg.payload.ds18T=parseInt(data[1]);\nmsg.payload.battery = parseInt(data[2]);\nmsg.payload.date=asiaDate;\nmsg.payload.time=asiaTime;\n\n\n\n//msg.payload.userToChange=42;\n//msg.payload.newUsername=\"tbl_data\";\nmsg.topic =\"INSERT INTO tbl_data (DHTtemp, DS18Temp,Battery_Level, Date, Time, dv_id) VALUES (:dhtT, :ds18T,:battery, :date, :time,2)\" ;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 300,
+        "wires": [
+            [
+                "ef58acf8bbb0553b"
+            ]
+        ]
+    },
+    {
+        "id": "345de143f769c649",
+        "type": "debug",
+        "z": "7b43875409fb364b",
+        "name": "data",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "aa402ecc066c3138",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "Send Humidity",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nmsg.payload = parseInt(data[1]);\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 380,
+        "wires": [
+            [
+                "8639fb746e23fbb7",
+                "64a19e8f586c586b"
+            ]
+        ]
+    },
+    {
+        "id": "d86e1ee5c0fc7f3c",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "Send  Temperature",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nmsg.payload = parseInt(data[0]);\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 440,
+        "wires": [
+            [
+                "d134fabb1e15079a",
+                "d90dbe506ec494f5"
+            ]
+        ]
+    },
+    {
+        "id": "518b033cc5174255",
+        "type": "debug",
+        "z": "7b43875409fb364b",
+        "name": "Normal Temp",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1790,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "e3e17d3ff3a9abd0",
+        "type": "http request",
+        "z": "7b43875409fb364b",
+        "name": "POST LINE API",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://notify-api.line.me/api/notify",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 1560,
+        "y": 640,
+        "wires": [
+            [
+                "518b033cc5174255"
+            ]
+        ]
+    },
+    {
+        "id": "6e1f03eb08f45419",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "line token",
+        "func": "\nmsg.headers = {\n    'content-type':'application/x-www-form-urlencoded',\n    'Authorization': 'Bearer '+msg.payload3\n};\nmsg.payload = {\n    \"message\":msg.payload\n};\nreturn msg;\n//aGsA3R4APnt2l5pheTz4N6XM0FYMXAN2igN6q7xmSsG นัด\n//hGcQRT9ISTO8H1CApvz0sDKNQhdOuLw9ejNS4fv8yGh แคน",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1420,
+        "y": 720,
+        "wires": [
+            [
+                "e3e17d3ff3a9abd0"
+            ]
+        ]
+    },
+    {
+        "id": "e75b4278b9602d5b",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "con",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nvar min = parseInt(data[0]);\nvar max = parseInt(data[1]);\nvar tk = data[2];\nmsg.payload3 = tk;\nvar temp1 = parseInt(data[3]);\nvar temp2 = parseInt(data[4]);\nvar num= temp1\nif (num <=min ) {\n    msg.payload = \"\\nWarning, the current temperature value is abnormal.\"+\"\\n\"+\"Temperature: \"+temp1+\"°C\"+\"\\n\"+\"Date: \"+asiaDate+\"\\n\"+\"Time: \"+asiaTime+\"\\n\";\n}\nelse if (num >=max ) {\n    msg.payload = \"\\nWarning, the current temperature value is abnormal.\"+\"\\n\"+\"Temperature: \"+temp1+\"°C\"+\"\\n\"+\"Date: \"+asiaDate+\"\\n\"+\"Time: \"+asiaTime+\"\\n\";\n}\nelse{\n   msg.payload = null\n}\n\n// msg.payload = \n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1310,
+        "y": 660,
+        "wires": [
+            [
+                "6e1f03eb08f45419"
+            ]
+        ]
+    },
+    {
+        "id": "eba41ce943c2b562",
+        "type": "join",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "mode": "custom",
+        "build": "string",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": ",",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "5",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1310,
+        "y": 580,
+        "wires": [
+            [
+                "e75b4278b9602d5b",
+                "f7d9e90fee246981"
+            ]
+        ]
+    },
+    {
+        "id": "b75ad5c622894f54",
+        "type": "debug",
+        "z": "7b43875409fb364b",
+        "name": "Freed Temp",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1930,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "a69ec68915c2e715",
+        "type": "http request",
+        "z": "7b43875409fb364b",
+        "name": "POST LINE API",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://notify-api.line.me/api/notify",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 1720,
+        "y": 960,
+        "wires": [
+            [
+                "b75ad5c622894f54"
+            ]
+        ]
+    },
+    {
+        "id": "659ee9a28b5d5194",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "line token",
+        "func": "\nmsg.headers = {\n    'content-type':'application/x-www-form-urlencoded',\n    'Authorization': 'Bearer '+msg.payload3\n};\nmsg.payload = {\n    \"message\":msg.payload\n};\nreturn msg;\n//aGsA3R4APnt2l5pheTz4N6XM0FYMXAN2igN6q7xmSsG นัด\n//hGcQRT9ISTO8H1CApvz0sDKNQhdOuLw9ejNS4fv8yGh แคน",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1540,
+        "y": 920,
+        "wires": [
+            [
+                "a69ec68915c2e715"
+            ]
+        ]
+    },
+    {
+        "id": "96774e4d68292a53",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "con",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nvar min = parseInt(data[0]);\nvar max = parseInt(data[1]);\nvar tk = data[2];\nmsg.payload3 = tk;\nvar temp1 = parseInt(data[3]);\nvar temp2 = parseInt(data[4]);\nvar num= temp2\nif (num <=min ) {\n    msg.payload = \"\\nWarning, the current Humidity value is abnormal.\" + \"\\n\" +\" Humidity : \"+temp2+\"°C\"+\"\\n\"+\"Date: \"+asiaDate+\"\\n\"+\"Time: \"+asiaTime+\"\\n\";\n}\nelse if (num >=max ) {\n    msg.payload = \"\\nWarning, the current Humidity value is abnormal.\" + \"\\n\" +\" Humidity : \"+temp2+\"°C\"+\"\\n\"+\"Date: \"+asiaDate+\"\\n\"+\"Time: \"+asiaTime+\"\\n\";\n}\nelse{\n    msg.payload = null\n}\n\n// msg.payload = \n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 860,
+        "wires": [
+            [
+                "659ee9a28b5d5194"
+            ]
+        ]
+    },
+    {
+        "id": "d718d1e442809e82",
+        "type": "join",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "mode": "custom",
+        "build": "string",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": ",",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "5",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1250,
+        "y": 840,
+        "wires": [
+            [
+                "96774e4d68292a53",
+                "1aa7945ae8bc7cc8"
+            ]
+        ]
+    },
+    {
+        "id": "32809ab1f8f98239",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "Select Temp 1 Max Min",
+        "func": "msg.topic = \"select dv_t_min,dv_t_max,dv_line_tk from tbl_device WHERE dv_id=2\"\n// msg.payload = \"SELECT DHTtemp,DS18Temp FROM tbl_data ORDER BY data_id DESC LIMIT 1\"\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 560,
+        "wires": [
+            [
+                "35f28f814971cd32"
+            ]
+        ]
+    },
+    {
+        "id": "35f28f814971cd32",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 880,
+        "y": 540,
+        "wires": [
+            [
+                "0eefd2a303859765",
+                "3aa542ef9ec57792",
+                "bcf9e19ed400db64"
+            ]
+        ]
+    },
+    {
+        "id": "3aa542ef9ec57792",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "max",
+        "func": "msg.payload = msg.payload[0].dv_t_max\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1110,
+        "y": 540,
+        "wires": [
+            [
+                "eba41ce943c2b562"
+            ]
+        ]
+    },
+    {
+        "id": "bcf9e19ed400db64",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "token",
+        "func": "msg.payload = msg.payload[0].dv_line_tk\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1070,
+        "y": 580,
+        "wires": [
+            [
+                "eba41ce943c2b562"
+            ]
+        ]
+    },
+    {
+        "id": "0eefd2a303859765",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "min",
+        "func": "// var min = msg.payload[0].dv_t_min\nmsg.payload = msg.payload[0].dv_t_min\n// var max  = msg.payload[0].dv_t_max\n// var tk = msg.payload[0].dv_line_tk\n// var tem1 = msg.payload[0].DHTtemp\n// var tem2 = msg.payload[0].DS18Temp\n// var g = parseInt(tem1) \n// var num=29\n// if (num >=min && num <= max) {\n//     msg.payload = 5555 ;\n// }else{\n//     msg.payload = null ;\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1090,
+        "y": 500,
+        "wires": [
+            [
+                "eba41ce943c2b562"
+            ]
+        ]
+    },
+    {
+        "id": "d907d67e7d65ee2d",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "Select Temp1 Data",
+        "func": "msg.topic = \"SELECT DHTtemp,DS18Temp FROM tbl_data ORDER BY data_id DESC LIMIT 1\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 620,
+        "wires": [
+            [
+                "050f76b894bd705d"
+            ]
+        ],
+        "outputLabels": [
+            "msg.topic1"
+        ]
+    },
+    {
+        "id": "ce74d972e1eb640d",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "temp1",
+        "func": "msg.payload = msg.payload[0].DHTtemp\n// var tem1 = msg.payload[0].DHTtemp\n// var tem2 = msg.payload[0].DS18Temp\n// // var g = parseInt(tem1) \n// var num=29\n// if (num >=min && num <= max) {\n//     msg.payload = 5555 ;\n// }else{\n//     msg.payload = null ;\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1070,
+        "y": 620,
+        "wires": [
+            [
+                "eba41ce943c2b562"
+            ]
+        ]
+    },
+    {
+        "id": "050f76b894bd705d",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 880,
+        "y": 620,
+        "wires": [
+            [
+                "ce74d972e1eb640d",
+                "d91af189c3f8eb59"
+            ]
+        ]
+    },
+    {
+        "id": "d91af189c3f8eb59",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "temp2",
+        "func": "msg.payload = msg.payload[0].DS18Temp\n// var tem1 = msg.payload[0].DHTtemp\n// var tem2 = msg.payload[0].DS18Temp\n// // var g = parseInt(tem1) \n// var num=29\n// if (num >=min && num <= max) {\n//     msg.payload = 5555 ;\n// }else{\n//     msg.payload = null ;\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1090,
+        "y": 660,
+        "wires": [
+            [
+                "eba41ce943c2b562"
+            ]
+        ]
+    },
+    {
+        "id": "097ef7185fc813d6",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "Select Temp 2 Max Min",
+        "func": "msg.topic = \"select dv_s_min,dv_s_max,dv_line_tk from tbl_device WHERE dv_id=2\"\n// msg.payload = \"SELECT DHTtemp,DS18Temp FROM tbl_data ORDER BY data_id DESC LIMIT 1\"\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 780,
+        "wires": [
+            [
+                "16544e8030853591"
+            ]
+        ]
+    },
+    {
+        "id": "16544e8030853591",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 800,
+        "y": 760,
+        "wires": [
+            [
+                "6c79e2d772157d85",
+                "1f6a410b9e279ad6",
+                "07dfc4a463309f19"
+            ]
+        ]
+    },
+    {
+        "id": "1f6a410b9e279ad6",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "max",
+        "func": "msg.payload = msg.payload[0].dv_s_max\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1030,
+        "y": 760,
+        "wires": [
+            [
+                "d718d1e442809e82"
+            ]
+        ]
+    },
+    {
+        "id": "07dfc4a463309f19",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "token",
+        "func": "msg.payload = msg.payload[0].dv_line_tk\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 990,
+        "y": 800,
+        "wires": [
+            [
+                "d718d1e442809e82"
+            ]
+        ]
+    },
+    {
+        "id": "6c79e2d772157d85",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "min",
+        "func": "// var min = msg.payload[0].dv_t_min\nmsg.payload = msg.payload[0].dv_s_min\n// var max  = msg.payload[0].dv_t_max\n// var tk = msg.payload[0].dv_line_tk\n// var tem1 = msg.payload[0].DHTtemp\n// var tem2 = msg.payload[0].DS18Temp\n// var g = parseInt(tem1) \n// var num=29\n// if (num >=min && num <= max) {\n//     msg.payload = 5555 ;\n// }else{\n//     msg.payload = null ;\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1010,
+        "y": 720,
+        "wires": [
+            [
+                "d718d1e442809e82"
+            ]
+        ]
+    },
+    {
+        "id": "443c564f06b03cc9",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "Select Temp2 Data",
+        "func": "msg.topic = \"SELECT DHTtemp,DS18Temp FROM tbl_data ORDER BY data_id DESC LIMIT 1\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 840,
+        "wires": [
+            [
+                "23b468f4eac6ea48"
+            ]
+        ],
+        "outputLabels": [
+            "msg.topic1"
+        ]
+    },
+    {
+        "id": "29c3aaf4fa9e3e11",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "temp1",
+        "func": "msg.payload = msg.payload[0].DHTtemp\n// var tem1 = msg.payload[0].DHTtemp\n// var tem2 = msg.payload[0].DS18Temp\n// // var g = parseInt(tem1) \n// var num=29\n// if (num >=min && num <= max) {\n//     msg.payload = 5555 ;\n// }else{\n//     msg.payload = null ;\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 990,
+        "y": 840,
+        "wires": [
+            [
+                "d718d1e442809e82"
+            ]
+        ]
+    },
+    {
+        "id": "23b468f4eac6ea48",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 800,
+        "y": 840,
+        "wires": [
+            [
+                "29c3aaf4fa9e3e11",
+                "45a3d987c3b7ddb2"
+            ]
+        ]
+    },
+    {
+        "id": "45a3d987c3b7ddb2",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "temp2",
+        "func": "msg.payload = msg.payload[0].DS18Temp\n// var tem1 = msg.payload[0].DHTtemp\n// var tem2 = msg.payload[0].DS18Temp\n// // var g = parseInt(tem1) \n// var num=29\n// if (num >=min && num <= max) {\n//     msg.payload = 5555 ;\n// }else{\n//     msg.payload = null ;\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1010,
+        "y": 880,
+        "wires": [
+            [
+                "d718d1e442809e82"
+            ]
+        ]
+    },
+    {
+        "id": "f7d9e90fee246981",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "alert1",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"en-CA\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nvar min = parseInt(data[0]);\nvar max = parseInt(data[1]);\nvar temp1 = parseInt(data[3]);\nvar temp2 = parseInt(data[4]);\nmsg.payload = {\n    t: parseInt(data[3]),\n    t2: parseInt(data[4]),\n    date : msg.payload1,\n    time:msg.payload2\n\n}\nmsg.payload.dhtT=parseInt(data[3]);\nmsg.payload.ds18T=parseInt(data[4]);\nmsg.payload.date=asiaDate;\nmsg.payload.time=asiaTime;\nvar num= temp1\nif (num <=min ) {\n    msg.topic=\"INSERT INTO tbl_alert (alert_data, alert_dvid, alert_temptype, alert_tempname, alert_date, alert_time) VALUES (:dhtT,2,'min','Shelf Temp', :date, :time)\" ;\n}\nelse if (num >=max ) {\n    msg.topic=\"INSERT INTO tbl_alert (alert_data, alert_dvid, alert_temptype, alert_tempname, alert_date, alert_time) VALUES (:dhtT,2,'max','Shelf Temp', :date, :time)\" ;\n}\nelse{\n   msg.payload = null\n}\n\n// msg.payload = \n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1500,
+        "y": 500,
+        "wires": [
+            [
+                "fd4fdda14e48c2d4"
+            ]
+        ]
+    },
+    {
+        "id": "fd4fdda14e48c2d4",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 1680,
+        "y": 480,
+        "wires": [
+            [
+                "3d732a5a9c3c45c9"
+            ]
+        ]
+    },
+    {
+        "id": "3d732a5a9c3c45c9",
+        "type": "debug",
+        "z": "7b43875409fb364b",
+        "name": "shelftemp alert",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1880,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "1aa7945ae8bc7cc8",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "alert2",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"en-CA\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nvar min = parseInt(data[0]);\nvar max = parseInt(data[1]);\nvar temp1 = parseInt(data[3]);\nvar temp2 = parseInt(data[4]);\nmsg.payload = {\n\n    t: parseInt(data[3]),\n    t2: parseInt(data[4]),\n    date : msg.payload1,\n    time:msg.payload2\n\n}\nmsg.payload.dhtT=parseInt(data[3]);\nmsg.payload.ds18T=parseInt(data[4]);\nmsg.payload.date=asiaDate;\nmsg.payload.time=asiaTime;\nvar num= temp1\nif (num <=min ) {\n    msg.topic=\"INSERT INTO tbl_alert (alert_data, alert_dvid, alert_temptype, alert_tempname, alert_date, alert_time) VALUES (:ds18T,2,'min','Freezer Temp', :date, :time)\" ;\n}\nelse if (num >=max ) {\n    msg.topic=\"INSERT INTO tbl_alert (alert_data, alert_dvid, alert_temptype, alert_tempname, alert_date, alert_time) VALUES (:ds18T,2,'max','Freezer Temp', :date, :time)\" ;\n}\nelse{\n   msg.payload = null\n}\n\n// msg.payload = \n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 800,
+        "wires": [
+            [
+                "20632ead5d679c6b"
+            ]
+        ]
+    },
+    {
+        "id": "9f5ba9f168acce74",
+        "type": "debug",
+        "z": "7b43875409fb364b",
+        "name": "FreezerTemp Alert",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1990,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "20632ead5d679c6b",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 1660,
+        "y": 800,
+        "wires": [
+            [
+                "9f5ba9f168acce74"
+            ]
+        ]
+    },
+    {
+        "id": "1f504648726c3cba",
+        "type": "mqtt in",
+        "z": "7b43875409fb364b",
+        "name": "room/temperature",
+        "topic": "room/temperature",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "1b0942d51db8cd39",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 90,
+        "y": 380,
+        "wires": [
+            [
+                "4dd7f65e98857d44"
+            ]
+        ]
+    },
+    {
+        "id": "4dd7f65e98857d44",
+        "type": "join",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "mode": "custom",
+        "build": "string",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": ",",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 290,
+        "y": 380,
+        "wires": [
+            [
+                "c121357dfc5f7bdf",
+                "aa402ecc066c3138",
+                "d86e1ee5c0fc7f3c",
+                "32809ab1f8f98239",
+                "d907d67e7d65ee2d",
+                "097ef7185fc813d6",
+                "443c564f06b03cc9",
+                "aefcc5d56d199c93",
+                "720c99a51afb800b",
+                "75a825cdf647e78e"
+            ]
+        ]
+    },
+    {
+        "id": "ef58acf8bbb0553b",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 820,
+        "y": 280,
+        "wires": [
+            [
+                "345de143f769c649"
+            ]
+        ]
+    },
+    {
+        "id": "a93c7215257e94eb",
+        "type": "mqtt in",
+        "z": "7b43875409fb364b",
+        "name": "room/humidity",
+        "topic": "room/humidity",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "1b0942d51db8cd39",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 480,
+        "wires": [
+            [
+                "4dd7f65e98857d44"
+            ]
+        ]
+    },
+    {
+        "id": "8639fb746e23fbb7",
+        "type": "ui_gauge",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "group": "5312fbd82eff1775",
+        "order": 23,
+        "width": 7,
+        "height": 5,
+        "gtype": "gage",
+        "title": "Humidity",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 960,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "d134fabb1e15079a",
+        "type": "ui_gauge",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "group": "5312fbd82eff1775",
+        "order": 11,
+        "width": 7,
+        "height": 5,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 950,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "64a19e8f586c586b",
+        "type": "ui_chart",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "group": "5312fbd82eff1775",
+        "order": 24,
+        "width": 7,
+        "height": 5,
+        "label": "Humidity",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "1",
+        "ymax": "100",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "17cfdca78f26a6fd",
+        "type": "mqtt in",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "topic": "room/battery",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "1b0942d51db8cd39",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 560,
+        "wires": [
+            [
+                "4dd7f65e98857d44"
+            ]
+        ]
+    },
+    {
+        "id": "634dde81630f9241",
+        "type": "debug",
+        "z": "7b43875409fb364b",
+        "name": "Battery ",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1860,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "f570de884a2dc9ed",
+        "type": "http request",
+        "z": "7b43875409fb364b",
+        "name": "POST LINE API",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://notify-api.line.me/api/notify",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 1660,
+        "y": 1180,
+        "wires": [
+            [
+                "634dde81630f9241"
+            ]
+        ]
+    },
+    {
+        "id": "bdbf5781f3742e28",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "line token",
+        "func": "\nmsg.headers = {\n    'content-type':'application/x-www-form-urlencoded',\n    'Authorization': 'Bearer '+msg.payload3\n};\nmsg.payload = {\n    \"message\":msg.payload\n};\nreturn msg;\n//aGsA3R4APnt2l5pheTz4N6XM0FYMXAN2igN6q7xmSsG นัด\n//hGcQRT9ISTO8H1CApvz0sDKNQhdOuLw9ejNS4fv8yGh แคน",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1480,
+        "y": 1140,
+        "wires": [
+            [
+                "f570de884a2dc9ed"
+            ]
+        ]
+    },
+    {
+        "id": "df8cac81f784261e",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "con",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nvar min = parseInt(data[0]);\nvar max = parseInt(data[1]);\nvar tk = data[2];\nmsg.payload3 = tk;\nvar temp1 = parseInt(data[3]);\nvar temp2 = parseInt(data[4]);\nvar num= temp2\nif (num <=min ) {\n    msg.payload = \"\\nWarning,\" + \"\\n\" +\"Battery Below  : \"+temp2+\"%\"+\"\\n\"+\"Date: \"+asiaDate+\"\\n\"+\"Time: \"+asiaTime+\"\\n\";\n}\nelse if (num >=max ) {\n    msg.payload = \"\\nWarning, \" + \"\\n\" +\"Battery Below : \"+temp2+\"%\"+\"\\n\"+\"Date: \"+asiaDate+\"\\n\"+\"Time: \"+asiaTime+\"\\n\";\n}\nelse{\n    msg.payload = null\n}\n\n// msg.payload = \n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1330,
+        "y": 1080,
+        "wires": [
+            [
+                "bdbf5781f3742e28"
+            ]
+        ]
+    },
+    {
+        "id": "de6803c37f7c612b",
+        "type": "join",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "mode": "custom",
+        "build": "string",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": ",",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "5",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1190,
+        "y": 1060,
+        "wires": [
+            [
+                "df8cac81f784261e"
+            ]
+        ]
+    },
+    {
+        "id": "11082b4352937b81",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "alert2",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"en-CA\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nvar min = parseInt(data[0]);\nvar max = parseInt(data[1]);\nvar temp1 = parseInt(data[3]);\nvar temp2 = parseInt(data[4]);\nmsg.payload = {\n\n    t: parseInt(data[3]),\n    t2: parseInt(data[4]),\n    date : msg.payload1,\n    time:msg.payload2\n\n}\nmsg.payload.dhtT=parseInt(data[3]);\nmsg.payload.ds18T=parseInt(data[4]);\nmsg.payload.date=asiaDate;\nmsg.payload.time=asiaTime;\nvar num= temp1\nif (num <=min ) {\n    msg.topic=\"INSERT INTO tbl_alert (alert_data, alert_dvid, alert_temptype, alert_tempname, alert_date, alert_time) VALUES (:ds18T,2,'min','Freezer Temp', :date, :time)\" ;\n}\nelse if (num >=max ) {\n    msg.topic=\"INSERT INTO tbl_alert (alert_data, alert_dvid, alert_temptype, alert_tempname, alert_date, alert_time) VALUES (:ds18T,2,'max','Freezer Temp', :date, :time)\" ;\n}\nelse{\n   msg.payload = null\n}\n\n// msg.payload = \n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1410,
+        "y": 1020,
+        "wires": [
+            [
+                "eece243002183397"
+            ]
+        ]
+    },
+    {
+        "id": "e681c46130f1dd12",
+        "type": "debug",
+        "z": "7b43875409fb364b",
+        "name": "FreezerTemp Alert",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1930,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "eece243002183397",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 1600,
+        "y": 1020,
+        "wires": [
+            [
+                "e681c46130f1dd12"
+            ]
+        ]
+    },
+    {
+        "id": "aefcc5d56d199c93",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "Select Battery Max Min",
+        "func": "msg.topic = \"select dv_b_min,dv_b_max,dv_line_tk from tbl_device WHERE dv_id=2\"\n// msg.payload = \"SELECT DHTtemp,DS18Temp FROM tbl_data ORDER BY data_id DESC LIMIT 1\"\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1040,
+        "wires": [
+            [
+                "0c14e053ef2a87f6"
+            ]
+        ]
+    },
+    {
+        "id": "0c14e053ef2a87f6",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 780,
+        "y": 1020,
+        "wires": [
+            [
+                "94c6e6e5ab31cd38",
+                "dd397b7e5fdd966e",
+                "17cf47b12263d518"
+            ]
+        ]
+    },
+    {
+        "id": "dd397b7e5fdd966e",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "max",
+        "func": "msg.payload = msg.payload[0].dv_b_max\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 1020,
+        "wires": [
+            [
+                "de6803c37f7c612b"
+            ]
+        ]
+    },
+    {
+        "id": "17cf47b12263d518",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "token",
+        "func": "msg.payload = msg.payload[0].dv_line_tk\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 1060,
+        "wires": [
+            [
+                "de6803c37f7c612b"
+            ]
+        ]
+    },
+    {
+        "id": "94c6e6e5ab31cd38",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "min",
+        "func": "\nmsg.payload = msg.payload[0].dv_b_min\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 980,
+        "wires": [
+            [
+                "de6803c37f7c612b"
+            ]
+        ]
+    },
+    {
+        "id": "720c99a51afb800b",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "Select Battery  Data",
+        "func": "msg.topic = \"SELECT DHTtemp,Battery_Level FROM tbl_data ORDER BY data_id DESC LIMIT 2\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1100,
+        "wires": [
+            [
+                "ca8851fa589a56fe"
+            ]
+        ],
+        "outputLabels": [
+            "msg.topic1"
+        ]
+    },
+    {
+        "id": "2fe34f84a6fc7cf0",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "temp1",
+        "func": "msg.payload = msg.payload[0].DHTtemp\n// var tem1 = msg.payload[0].DHTtemp\n// var tem2 = msg.payload[0].DS18Temp\n// // var g = parseInt(tem1) \n// var num=29\n// if (num >=min && num <= max) {\n//     msg.payload = 5555 ;\n// }else{\n//     msg.payload = null ;\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 1100,
+        "wires": [
+            [
+                "de6803c37f7c612b"
+            ]
+        ]
+    },
+    {
+        "id": "ca8851fa589a56fe",
+        "type": "mysql",
+        "z": "7b43875409fb364b",
+        "mydb": "af52bc9d.5eb43",
+        "name": "Database",
+        "x": 780,
+        "y": 1100,
+        "wires": [
+            [
+                "2fe34f84a6fc7cf0",
+                "d7e69b97aa21f8b1"
+            ]
+        ]
+    },
+    {
+        "id": "d7e69b97aa21f8b1",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "temp2",
+        "func": "msg.payload = msg.payload[0].Battery_Level\n// var tem1 = msg.payload[0].DHTtemp\n// var tem2 = msg.payload[0].DS18Temp\n// // var g = parseInt(tem1) \n// var num=29\n// if (num >=min && num <= max) {\n//     msg.payload = 5555 ;\n// }else{\n//     msg.payload = null ;\n// }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 1140,
+        "wires": [
+            [
+                "de6803c37f7c612b"
+            ]
+        ]
+    },
+    {
+        "id": "75a825cdf647e78e",
+        "type": "function",
+        "z": "7b43875409fb364b",
+        "name": "Send  Battery",
+        "func": "var str = msg.payload;\nvar data = str.slice(0).split(',');\nvar d = new Date();\nvar asiaDate = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",year: 'numeric', month: '2-digit', day: '2-digit'});\nvar asiaTime = new Date().toLocaleString(\"th-TH\", {timeZone: \"Asia/Bangkok\",hour: '2-digit', minute: '2-digit', second: '2-digit'});\nmsg.payload1 = asiaDate;\nmsg.payload2=asiaTime;\nmsg.payload = parseInt(data[2]);\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 480,
+        "wires": [
+            [
+                "7e44a2ea29c31248"
+            ]
+        ]
+    },
+    {
+        "id": "d90dbe506ec494f5",
+        "type": "ui_chart",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "group": "5312fbd82eff1775",
+        "order": 12,
+        "width": 7,
+        "height": 5,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "50",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1090,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0e24d7c51a81a673",
+        "type": "ui_media",
+        "z": "7b43875409fb364b",
+        "group": "5312fbd82eff1775",
+        "name": "",
+        "width": 8,
+        "height": 3,
+        "order": 2,
+        "category": "test",
+        "file": "Screenshot_2.png",
+        "layout": "adjust",
+        "showcontrols": true,
+        "loop": true,
+        "onstart": false,
+        "scope": "local",
+        "tooltip": "",
+        "x": 1270,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2f1ed4363cd74405",
+        "type": "ui_media",
+        "z": "7b43875409fb364b",
+        "group": "5312fbd82eff1775",
+        "name": "",
+        "width": 4,
+        "height": 3,
+        "order": 4,
+        "category": "test",
+        "file": "หลอดไฟ.png",
+        "layout": "adjust",
+        "showcontrols": true,
+        "loop": true,
+        "onstart": false,
+        "scope": "local",
+        "tooltip": "",
+        "x": 1250,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7e44a2ea29c31248",
+        "type": "ui_gauge",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "group": "5312fbd82eff1775",
+        "order": 3,
+        "width": 4,
+        "height": 3,
+        "gtype": "wave",
+        "title": "Battery Level",
+        "label": " %",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 910,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "edf283c4483c0df5",
+        "type": "ui_text",
+        "z": "7b43875409fb364b",
+        "group": "5312fbd82eff1775",
+        "order": 35,
+        "width": 14,
+        "height": 1,
+        "name": "",
+        "label": "©  PSU X บริษัท เรนิตา อินโนเวชั่น จำกัด RENITA INNOVATION COMPANY LIMITED.",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 1510,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "17b672909c24cad8",
+        "type": "ui_switch",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "group": "5312fbd82eff1775",
+        "order": 8,
+        "width": 1,
+        "height": 1,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "room/lamp",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 870,
+        "y": 180,
+        "wires": [
+            [
+                "6caa91ac1fc6b26f"
+            ]
+        ]
+    },
+    {
+        "id": "6caa91ac1fc6b26f",
+        "type": "mqtt out",
+        "z": "7b43875409fb364b",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "1b0942d51db8cd39",
+        "x": 1090,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "7d95d0324400fea2",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 1,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "e7c14186d825bd41",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "521634ad5475ab42",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 5,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "54082f298cfc8770",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "6cff19f758df30be",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 7,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "da617e0d9e34ca10",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 8,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "5fb3ced2070b2770",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 9,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "8a2d3bd653289ac7",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 10,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "1fb70e1b60b51238",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 11,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "5ab44f265d8bed96",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 12,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "2674b25cf3db4c28",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 13,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "0a01c26db83b8109",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 14,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "8cae93113eac87a1",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 15,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "a82b95315492f0e5",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 16,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "03ca16ca833e7b3b",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 17,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "e48d0817516033df",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 18,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "7d67e58930e88960",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 19,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "0e66d8e78cae6f41",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "3e0ff9bdb5dfe11e",
+        "order": 20,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "6824339ce3f45926",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 1,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "1be89693bc1c6748",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "3553c77e108e634b",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "2e88527f364cea1a",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 7,
+        "width": 15,
+        "height": 1
+    },
+    {
+        "id": "74e4817a1e70a242",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 9,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "617764f207904a7b",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 10,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "02db2f6ea9d005e5",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 13,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "388662523a251d78",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 14,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "4ef90de6394d45b3",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 15,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "f52c47a29edcaef4",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 16,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "38afcce5680d87e5",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 17,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "d9e2339cf3e3b691",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 18,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "4c08a29bc6aa03ce",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 19,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "e9ebf5503789f3a2",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 20,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "6f95f0c1ff8b4b4c",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 21,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "0c92bd3a7f83af3e",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 22,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "99d0bc532c701be5",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 25,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "f5a08dbc891bc5f8",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 26,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "c7e5a7983c4acc3c",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 27,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "9dedc3bce3a6636f",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 28,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "32570c07117be1bd",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 29,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "a0a2622b304140f0",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 30,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "68be011251763ce4",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 31,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "4dc75a80e9d8944b",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 32,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "bf31190840e9eeb3",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 33,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "6f619b68d57da36e",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 34,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "bffa07c24dd4dfaa",
+        "type": "ui_spacer",
+        "z": "7b43875409fb364b",
+        "name": "spacer",
+        "group": "5312fbd82eff1775",
+        "order": 36,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "af52bc9d.5eb43",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "fride",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "1b0942d51db8cd39",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.1.41",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "5312fbd82eff1775",
+        "type": "ui_group",
+        "name": "Device 2",
+        "tab": "6ae78815fc1507b6",
+        "order": 1,
+        "disp": true,
+        "width": "18",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3e0ff9bdb5dfe11e",
+        "type": "ui_group",
+        "name": "Chart",
+        "tab": "906562eeb993cde9",
+        "order": 1,
+        "disp": true,
+        "width": 20,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "6ae78815fc1507b6",
+        "type": "ui_tab",
+        "name": "Dashboard",
+        "icon": "dashboard",
+        "order": 3,
+        "disabled": false,
+        "hidden": true
+    },
+    {
+        "id": "906562eeb993cde9",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": true
+    }
+]

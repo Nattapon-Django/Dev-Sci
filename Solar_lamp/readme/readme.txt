@@ -1,0 +1,14 @@
+node-red
+3.0.2
+node-red-contrib-aedes
+0.8.2
+node-red-contrib-firebase-admin-config
+1.1.5
+node-red-contrib-firebase-realtime-database
+1.0.9
+node-red-contrib-ui-media
+1.2.0
+node-red-dashboard
+3.1.7
+node-red-node-mysql
+1.0.3
