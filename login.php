@@ -57,7 +57,7 @@ if (isset($_POST['submit-login'])) {
             <div class="row" style="margin: 10px 0px 20px 0px;">
                 <div class="col-md-12">
                     <!-- <b>Solar Cell </b> <span style="color: #00c569;">Lamp</span> -->
-                    <img src="Logo.png" alt="" style="height: 300px;">
+                    <img src="no-image.png" alt="" style="height: 100%; width:100%;">
                 </div>
             </div>
 

@@ -103,7 +103,7 @@ if (isset($_GET["action"]) == "remove") {
                                         </div>
                                     </div>
 
-                                    <h4 style="margin-left: 11.5rem;"><b class="text-danger">Set Alert</b></h4>
+                                    <!-- <h4 style="margin-left: 11.5rem;"><b class="text-danger">Set Alert</b></h4>
                                     <div class="form-group row">
                                         <label for="txt_name" class="col-sm-2 col-form-label text-sm-right">Temperature</label>
                                         <div class="col-sm-2">
@@ -131,7 +131,7 @@ if (isset($_GET["action"]) == "remove") {
                                         <div class="col-sm-2">
                                             <input name="txt_b_max" type="number" class="form-control" id="txt_b_max" placeholder="max" value="<?php echo $fetch_your_id['dv_b_max']; ?>">
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <h4 style="margin-left: 11.5rem;"><b class="text-danger">Set Location</b></h4>
                                     <div class="form-group row">
@@ -180,12 +180,12 @@ if (isset($_GET["action"]) == "remove") {
 
                                     </div>
 
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <label for="txt_name" class="col-sm-2 col-form-label text-sm-right">Line Token</label>
                                         <div class="col-sm-10">
                                             <input name="txt_line_tk" type="text" class="form-control" id="txt_line_tk" value="<?php echo $fetch_your_id['dv_line_tk']; ?>">
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="form-group row">
                                         <label for="inputPassword3" class="col-sm-2 col-form-label text-right"></label>
