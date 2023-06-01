@@ -187,8 +187,19 @@ if (isset($_GET['search'])) {
                                                         <th scope="col">Date</th>
                                                         <th scope="col">Time</th>
                                                         <th scope="col">Temperature</th>
+                                                        <th scope="col">COD</th>
+                                                        <th scope="col">TOC</th>
+                                                        <th scope="col">SAC</th>
+                                                        <th scope="col">BOD</th>
+                                                        <th scope="col">Teans</th>
+                                                        <th scope="col">Turbid</th>
                                                         <th scope="col">Humidity</th>
-                                                        <th scope="col">Battery_Level</th>
+                                                        <th scope="col">bcsVolt</th>
+                                                        <th scope="col">flowRate</th>
+                                                        <th scope="col">Volt</th>
+                                                        <th scope="col">Amp</th>
+                                                        <th scope="col">Watt</th>
+                                                        <th scope="col">kWh</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -198,9 +209,20 @@ if (isset($_GET['search'])) {
                                                         <tr>
                                                             <th><?php echo $row['Date']; ?></th>
                                                             <th><?php echo $row['Time']; ?></th>
-                                                            <td><?php echo $row['DHTtemp']; ?></td>
-                                                            <td><?php echo $row['DS18Temp']; ?></td>
-                                                            <td><?php echo $row['Battery_Level']; ?></td>
+                                                            <td><?php echo $row['Temp']; ?></td>
+                                                            <td><?php echo $row['COD']; ?></td>
+                                                            <td><?php echo $row['TOC']; ?></td>
+                                                            <td><?php echo $row['SAC']; ?></td>
+                                                            <td><?php echo $row['BOD']; ?></td>
+                                                            <td><?php echo $row['Trans']; ?></td>
+                                                            <td><?php echo $row['Tubid']; ?></td>
+                                                            <td><?php echo $row['Humi']; ?></td>
+                                                            <td><?php echo $row['BcsVolt']; ?></td>
+                                                            <td><?php echo $row['FlowRate']; ?></td>
+                                                            <td><?php echo $row['Volt']; ?></td>
+                                                            <td><?php echo $row['Amp']; ?></td>
+                                                            <td><?php echo $row['Watt']; ?></td>
+                                                            <td><?php echo $row['kWh']; ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                 </tbody>
