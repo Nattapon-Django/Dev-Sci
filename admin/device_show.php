@@ -194,12 +194,16 @@ if (isset($_GET['search'])) {
                                                         <th scope="col">Teans</th>
                                                         <th scope="col">Turbid</th>
                                                         <th scope="col">Humidity</th>
-                                                        <th scope="col">bcsVolt</th>
                                                         <th scope="col">flowRate</th>
-                                                        <th scope="col">Volt</th>
-                                                        <th scope="col">Amp</th>
-                                                        <th scope="col">Watt</th>
-                                                        <th scope="col">kWh</th>
+                                                        <th scope="col">bcsVolt</th>
+                                                        <th scope="col">DI1</th>
+                                                        <th scope="col">DI2</th>
+                                                        <th scope="col">DI3</th>
+                                                        <th scope="col">DI4</th>
+                                                        <th scope="col">DI5</th>
+                                                        <th scope="col">DI6</th>
+                                                        <th scope="col">DI7</th>
+                                                        <th scope="col">DI8</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -215,14 +219,18 @@ if (isset($_GET['search'])) {
                                                             <td><?php echo $row['SAC']; ?></td>
                                                             <td><?php echo $row['BOD']; ?></td>
                                                             <td><?php echo $row['Trans']; ?></td>
-                                                            <td><?php echo $row['Tubid']; ?></td>
+                                                            <td><?php echo $row['Turbid']; ?></td>
                                                             <td><?php echo $row['Humi']; ?></td>
-                                                            <td><?php echo $row['BcsVolt']; ?></td>
                                                             <td><?php echo $row['FlowRate']; ?></td>
-                                                            <td><?php echo $row['Volt']; ?></td>
-                                                            <td><?php echo $row['Amp']; ?></td>
-                                                            <td><?php echo $row['Watt']; ?></td>
-                                                            <td><?php echo $row['kWh']; ?></td>
+                                                            <td><?php echo $row['bcsVolt']; ?></td>
+                                                            <td><?php echo $row['DI1']; ?></td>
+                                                            <td><?php echo $row['DI2']; ?></td>
+                                                            <td><?php echo $row['DI3']; ?></td>
+                                                            <td><?php echo $row['DI4']; ?></td>
+                                                            <td><?php echo $row['DI5']; ?></td>
+                                                            <td><?php echo $row['DI6']; ?></td>
+                                                            <td><?php echo $row['DI7']; ?></td>
+                                                            <td><?php echo $row['DI8']; ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                 </tbody>
