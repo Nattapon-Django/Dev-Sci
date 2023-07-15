@@ -229,9 +229,20 @@ class dbcon
             }
         }
     }
-    function get_graph($dv_id, $date, $time_start, $time_end)
+    function get_graph($dv_id, $date_start, $date_end, $time_start, $time_end)
     {
-        $result = $this->dbcon->query("SELECT * FROM tbl_data WHERE `dv_id`='$dv_id' AND `Date`='$date' AND `Time` BETWEEN '$time_start' AND '$time_end' ");
+        $result = $this->dbcon->query("SELECT * FROM tbl_data 
+                                        WHERE `dv_id`='$dv_id' 
+                                        AND `Date`  BETWEEN '$date_start' AND '$date_end'
+                                        AND `Time` BETWEEN '$time_start' AND '$time_end' ");
+        return $result;
+    }
+    function get_graph_all($dv_id, $date_start, $time_start, $time_end)
+    {
+        $result = $this->dbcon->query("SELECT * FROM tbl_data 
+                                        WHERE `dv_id`='$dv_id' 
+                                        AND `Date` = '$date_start'
+                                        AND `Time` BETWEEN '$time_start' AND '$time_end' ");
         return $result;
     }
     function device_get_max()

@@ -125,9 +125,10 @@ if (isset($_GET['search'])) {
                                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dashboard
                                         <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="http://localhost:1880/ui/#!/<?php echo $_GET['dv_id']; ?>?socketid=v_aDPnuiD_2zjDrzAAAF" target="_blank"><i class="fa fa-location-arrow" aria-hidden="true"></i> Realtime</a></li>
+                                        <!-- <li><a class="dropdown-item" href="http://localhost:1880/ui/#!/<?php echo $_GET['dv_id']; ?>?socketid=v_aDPnuiD_2zjDrzAAAF" target="_blank"><i class="fa fa-location-arrow" aria-hidden="true"></i> Realtime</a></li> -->
+                                        <li><a class="dropdown-item" href="http://141.11.159.63:200<?php echo $_GET['dv_id']; ?>/ui/#!/0?socketid=LRgkGBXYPKoI6FuVAAD7" target="_blank"><i class="fa fa-location-arrow" aria-hidden="true"></i> Realtime</a></li>
                                         </li>
-                                        <li><a class="dropdown-item" href="report.php?dv_id=<?php echo $_GET['dv_id']; ?>"><i class="fa fa-flag" aria-hidden="true"></i> Report</a></li>
+                                        <li><a class="dropdown-item" href="report.php?dv_id=<?php echo $_GET['dv_id']; ?>&type=all"><i class="fa fa-flag" aria-hidden="true"></i> Report</a></li>
                                     </ul>
                                 </div>
 <!-- 

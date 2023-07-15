@@ -5,7 +5,7 @@
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>A</b>LT</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Solar Cell</b> Lamp</span>
+        <span class="logo-lg" style="font-size: 18px;">ระบบบริหารอุปกรณ์ไอโอที</span>
     </a>
     
     <!-- Header Navbar -->

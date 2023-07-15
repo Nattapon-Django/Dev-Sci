@@ -14,6 +14,7 @@ $fetch_device = $fetch_device->fetch_array();
 ?>
 <title>Report</title>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 <link rel="stylesheet" href="../css/dataTables.bootstrap.min.css">
 </head>
 
@@ -60,13 +61,33 @@ $fetch_device = $fetch_device->fetch_array();
                                             <form action="" method="GET">
                                                 <input type="hidden" name="dv_id" value="<?php echo $_GET['dv_id']; ?>">
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-3">
-                                                        <label for="date">Date</label>
-                                                        <input name="search_date" type="date" class="form-control" id="date" <?php if (!empty($_GET['search_date'])) {
-                                                                                                                                    echo 'value=' . $_GET['search_date'];
-                                                                                                                                } ?> required>
+
+                                                    <div class="form-group col-md-2">
+                                                        <label for="date">Type </label>
+                                                        <select class="form-control" aria-label="Default select example" name="type">
+                                                            <option value="all" <?php if (isset($_GET['type']) && $_GET['type'] == 'all') echo 'selected'; ?>>-- All --</option>
+                                                            <option value="Temp" <?php if (isset($_GET['type']) && $_GET['type'] == 'Temp') echo 'selected'; ?>>Temp</option>
+                                                            <option value="COD" <?php if (isset($_GET['type']) && $_GET['type'] == 'COD') echo 'selected'; ?>>COD</option>
+                                                            <option value="TOC" <?php if (isset($_GET['type']) && $_GET['type'] == 'TOC') echo 'selected'; ?>>TOC</option>
+                                                            <option value="SAC" <?php if (isset($_GET['type']) && $_GET['type'] == 'SAC') echo 'selected'; ?>>SAC</option>
+                                                            <option value="BOD" <?php if (isset($_GET['type']) && $_GET['type'] == 'BOD') echo 'selected'; ?>>BOD</option>
+                                                            <option value="Trans" <?php if (isset($_GET['type']) && $_GET['type'] == 'Trans') echo 'selected'; ?>>Trans</option>
+                                                            <option value="Turbid" <?php if (isset($_GET['type']) && $_GET['type'] == 'Turbid') echo 'selected'; ?>>Turbid</option>
+                                                            <option value="Humi" <?php if (isset($_GET['type']) && $_GET['type'] == 'Humi') echo 'selected'; ?>>Humi</option>
+                                                            <option value="FlowRate" <?php if (isset($_GET['type']) && $_GET['type'] == 'FlowRate') echo 'selected'; ?>>FlowRate</option>
+                                                            <option value="bcsVolt" <?php if (isset($_GET['type']) && $_GET['type'] == 'bcsVolt') echo 'selected'; ?>>bcsVolt</option>
+                                                        </select>
                                                     </div>
-                                                    <div class="form-group col-md-3">
+                                                    <div class="form-group col-md-2">
+                                                        <label for="date">Date</label>
+                                                        <input name="search_date_start" type="date" class="form-control" id="date" <?php if (!empty($_GET['search_date_start'])) {
+                                                                                                                                        echo 'value=' . $_GET['search_date_start'];
+                                                                                                                                    } ?> required>
+                                                    </div>
+
+
+
+                                                    <div class="form-group col-md-2">
                                                         <label for="Start">Time Start</label>
                                                         <input name="time_start_search" type="time" class="form-control" id="Start" <?php if (!empty($_GET['time_start_search'])) {
                                                                                                                                         echo 'value=' . $_GET['time_start_search'];
@@ -74,7 +95,7 @@ $fetch_device = $fetch_device->fetch_array();
                                                                                                                                         echo 'value=00:00';
                                                                                                                                     } ?> required>
                                                     </div>
-                                                    <div class="form-group col-md-3">
+                                                    <div class="form-group col-md-2">
                                                         <label for="End">Time End</label>
                                                         <input name="time_end_search" type="time" class="form-control" id="End" <?php if (!empty($_GET['time_end_search'])) {
                                                                                                                                     echo 'value=' . $_GET['time_end_search'];
@@ -82,208 +103,231 @@ $fetch_device = $fetch_device->fetch_array();
                                                                                                                                     echo 'value=23:59';
                                                                                                                                 } ?> required>
                                                     </div>
+
                                                     <div class="form-group col-md-2">
                                                         <label for="">&nbsp;</label>
-                                                        <button name="search" value="ok" type="submit" class="form-control btn btn-success"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+                                                        <button name="search" value="ok" type="submit" class="form-control btn btn-info"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
                                                     </div>
+
                                                 </div>
                                             </form>
 
                                         </div>
                                     </div>
                                 </div>
-                                <?php if (isset($_GET['search'])) {
-                                    $date_search = convertDateQueryToSQL($_GET['search_date']);
 
-                                    $get_graph = $obj_dbcon->get_graph($_GET['dv_id'], $date_search, $_GET['time_start_search'], $_GET['time_end_search']);
+                                <?php
+                                if (isset($_GET['search']) == 'ok') {
+                                    $date_search_start = convertDateQueryToSQL($_GET['search_date_start']);
 
-                                    $date = array();
-                                    $DHTtemp = array();
-                                    $DHTtemp_value = array();
-                                    $DS18temp = array();
-                                    $DS19temp_value = array();
-                                    while ($rs = $get_graph->fetch_array()) {
-                                        $date[] = "\"" . $rs['Time'] . "\"";
-                                        $DHTtemp[] = "\"" . $rs['DHTtemp'] . "\"";
-                                        $DS18temp[] = "\"" . $rs['DS18Temp'] . "\"";
+                                    $get_graph_all = $obj_dbcon->get_graph_all($_GET['dv_id'], $date_search_start, $_GET['time_start_search'], $_GET['time_end_search']);
+                                    $typeLists = ['Temp', 'COD', 'TOC', 'SAC', 'BOD', 'Trans', 'Turbid', 'Humi', 'FlowRate', 'bcsVolt'];
+                                    $types = [];
 
-                                        $DHTtemp_value[] = $rs['DHTtemp'];
-                                        $DS18temp_value[] = $rs['DS18Temp'];
-                                    }
-                                    $date = implode(",", $date);
-                                    $DHTtemp = implode(",", $DHTtemp);
-                                    $DS18temp = implode(",", $DS18temp);
-
-
-                                    if (!empty($DHTtemp_value)) {
-                                        //average
-                                        $DHTtemp_value = array_filter($DHTtemp_value);
-                                        $average_DHT = array_sum($DHTtemp_value) / count($DHTtemp_value);
-                                        //
-                                    }
-                                    if (!empty($DS18temp_value)) {
-                                        //average
-                                        $DS18temp_value = array_filter($DS18temp_value);
-                                        $average_DS18 = array_sum($DS18temp_value) / count($DS18temp_value);
-                                        //
+                                    while ($dataSet = $get_graph_all->fetch_array()) {
+                                        foreach ($typeLists as $typeList) {
+                                            if (isset($dataSet[$typeList])) {
+                                                $types[$typeList][] = [
+                                                    'date' => $dataSet['Date'],
+                                                    'time' => $dataSet['Time'],
+                                                    'value' => $dataSet[$typeList]
+                                                ];
+                                            }
+                                        }
                                     }
 
+                                    foreach ($types as $type => $data) {
+                                        $values = [];
+                                        foreach ($data as $entry) {
+                                            $values[] = $entry['value'];
+                                        }
+                                        $minMaxAvg[$type]['min'] = min($values);
+                                        $minMaxAvg[$type]['max'] = max($values);
+                                        $minMaxAvg[$type]['avg'] = array_sum($values) / count($values);
+                                    }
+
+                                    $chartData = [];
+                                    foreach ($types as $type => $data) {
+                                        $timeData = [];
+                                        $valueData = [];
+                                        foreach ($data as $entry) {
+                                            $timeData[] = $entry['time'];
+                                            $valueData[] = $entry['value'];
+                                        }
+                                        $chartData[$type] = [
+                                            'time' => $timeData,
+                                            'value' => $valueData
+                                        ];
+                                    }
                                 ?>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <?php
-                                            if (empty($DHTtemp)) { ?>
-                                                <div class="col-12">
-                                                    <div class="alert alert-danger" role="alert">
-                                                        <b>Results</b> from <?= $_GET['search_date'] ?> time <?= $_GET['time_start_search'] ?> to <?= $_GET['time_end_search'] ?>
-                                                    </div>
-                                                    <div class="jumbotron jumbotron-fluid">
-                                                        <div class="container">
-                                                            <h5 class="display-9 text-center">No data found</h5>
-                                                        </div>
+                                    <?php if ($_GET['type'] == "all") { ?>
+                                        <?php if (empty($chartData)) { ?>
+                                            <div class="col-12">
+                                                <div class="alert alert-danger" role="alert">
+                                                    <b>Results</b> from <?= $_GET['search_date_start'] ?> time <?= $_GET['time_start_search'] ?> to <?= $_GET['time_end_search'] ?>
+                                                </div>
+                                                <div class="jumbotron jumbotron-fluid">
+                                                    <div class="container">
+                                                        <h5 class="display-9 text-center">No data found</h5>
                                                     </div>
                                                 </div>
-                                            <?php } else {
-                                            ?>
-                                                <div class="col-12">
-                                                    <div class="alert alert-success" role="alert">
-                                                        <b>Results</b> from <?= $_GET['search_date'] ?> time <?= $_GET['time_start_search'] ?> to <?= $_GET['time_end_search'] ?>
+                                            </div>
+                                        <?php exit; } ?>
+                                        <div class="alert alert-success" role="alert">
+                                            <b>Results</b> from <?= $_GET['search_date_start'] ?> time <?= $_GET['time_start_search'] ?> to <?= $_GET['time_end_search'] ?>
+                                        </div>
+                                        <?php foreach ($typeLists as $typeList) { ?>
+                                            <div class="col-md-6">
+                                                <canvas id="myChart_<?php echo $typeList; ?>"></canvas>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col"><b>Minimum value</b></span></th>
+                                                                    <th scope="col"><b>Maximum value</b></span></th>
+                                                                    <th scope="col"><b>Average</b></span></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="info"><?php echo $minMaxAvg[$typeList]['min']; ?></td>
+                                                                    <td class="danger"><?php echo $minMaxAvg[$typeList]['max']; ?></td>
+                                                                    <td class="warning"><?php echo number_format($minMaxAvg[$typeList]['avg'], 2); ?></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
-                                                    <p class="mt-3">Total <?= $get_graph->num_rows; ?> items</p>
-                                                    <canvas id="myChart" width="800px" height="300px"></canvas><br>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                var ctx = document.getElementById("myChart_<?php echo $typeList; ?>").getContext('2d');
+                                                var myChart = new Chart(ctx, {
+                                                    type: 'line',
+                                                    data: {
+                                                        labels: <?php echo json_encode($chartData[$typeList]['time']); ?>,
+                                                        datasets: [{
+                                                            label: '<?php echo $typeList; ?>',
+                                                            data: <?php echo json_encode($chartData[$typeList]['value']); ?>,
+                                                            backgroundColor: ['rgba(0, 0, 0, 0)'],
+                                                            borderColor: ['rgba(0,191,255,1)'],
+                                                            borderWidth: 1,
+                                                        }]
+                                                    },
+                                                    options: {
+                                                        scales: {
+                                                            yAxes: [{
+                                                                ticks: {
+                                                                    beginAtZero: true
+                                                                }
+                                                            }]
+                                                        }
+                                                    }
+                                                });
+                                            </script>
+                                        <?php } ?>
+                                        <?php } else {
+
+                                        $selectedType = $_GET['type'];
+                                        if (isset($chartData[$selectedType])) {
+                                            $timeData = $chartData[$selectedType]['time'];
+                                            $valueData = $chartData[$selectedType]['value'];
+                                            $minValue = $minMaxAvg[$selectedType]['min'];
+                                            $maxValue = $minMaxAvg[$selectedType]['max'];
+                                            $avgValue = $minMaxAvg[$selectedType]['avg'];
+                                        ?>
+
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <b>Results</b> from <?= $_GET['search_date_start'] ?> time <?= $_GET['time_start_search'] ?> to <?= $_GET['time_end_search'] ?>
+                                                </div>
+                                                <p class="mt-3">Total <?= $get_graph_all->num_rows; ?> items</p>
+                                                <div class="col-md-12">
+                                                    <canvas id="myChart"></canvas><br>
                                                     <div class="row">
                                                         <div class="col-xs-12">
                                                             <table class="table">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th scope="col"></th>
-                                                                        <th scope="col"><b style="font-size:18px;">Minimum value</b></span></th>
-                                                                        <th scope="col"><b style="font-size:18px;">Maximum value</b></span></th>
-                                                                        <th scope="col"><b style="font-size:18px;">Average</b></span></th>
+                                                                        <th scope="col"><b>Minimum value</b></th>
+                                                                        <th scope="col"><b>Maximum value</b></th>
+                                                                        <th scope="col"><b>Average</b></th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <th scope="row" class="active">Temperature</th>
-                                                                        <td class="info"><?php echo (min($DHTtemp_value));  ?></td>
-                                                                        <td class="danger"><?php echo (max($DHTtemp_value));  ?></td>
-                                                                        <td class="warning"><?php echo number_format($average_DHT, 2);  ?></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row" class="active">Humidity</th>
-                                                                        <td class="info"><?php echo (min($DS18temp_value));  ?></td>
-                                                                        <td class="danger"><?php echo (max($DS18temp_value));  ?></td>
-                                                                        <td class="warning"><?php echo number_format($average_DS18, 2);  ?></td>
+                                                                        <td class="info"><?php echo $minValue; ?></td>
+                                                                        <td class="danger"><?php echo $maxValue; ?></td>
+                                                                        <td class="warning"><?php echo number_format($avgValue, 2); ?></td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
-
                                                         </div>
                                                     </div>
-                                                    <?php
-                                                    $t_max = $fetch_device['dv_t_max'];
-                                                    $t_min = $fetch_device['dv_t_min'];
-
-                                                    $s_max = $fetch_device['dv_s_max'];
-                                                    $s_min = $fetch_device['dv_s_min'];
-
-                                                    for ($i = 1; $i <= $get_graph->num_rows; $i++) {
-                                                        $t_max .= ','.$fetch_device['dv_t_max'];
-                                                        $t_min .= ','.$fetch_device['dv_t_min'];
-    
-                                                        $s_max .= ','.$fetch_device['dv_s_max'];
-                                                        $s_min .= ','.$fetch_device['dv_s_min'];
-                                                    }
-
-                                                    ?>
-                                                    <script>
-                                                        var ctx = document.getElementById("myChart").getContext('2d');
-                                                        var myChart = new Chart(ctx, {
-                                                            type: 'line',
-                                                            data: {
-                                                                labels: [<?php echo $date; ?>],
-                                                                datasets: [{
-                                                                        label: 'Temperature',
-                                                                        data: [<?php echo $DHTtemp; ?>],
-                                                                        backgroundColor: ['rgba(0, 0, 0, 0)'],
-                                                                        borderColor: ['rgba(0,191,255,1)'],
-                                                                        borderWidth: 2,
-                                                                    },
-                                                                    {
-                                                                        label: 'Humidity',
-                                                                        data: [<?php echo $DS18temp; ?>],
-                                                                        backgroundColor: ['rgba(0, 0, 0, 0)'],
-                                                                        borderColor: ['rgba(255, 159, 64, 1)'],
-                                                                        borderWidth: 2
-                                                                    },
-
-                                                                    {
-                                                                        label: 'Temperature_MAX',
-                                                                        data: [<?php echo $t_max; ?>],
-                                                                        backgroundColor: ['rgba(0, 0, 0, 0)'],
-                                                                        borderColor: ['rgb(204, 41, 0)'],
-                                                                        borderWidth: 2,
-                                                                        pointRadius: 0
-                                                                    },
-
-                                                                    {
-                                                                        label: 'Temperature_MIN',
-                                                                        data: [<?php echo $t_min; ?>],
-                                                                        backgroundColor: ['rgba(0, 0, 0, 0)'],
-                                                                        borderColor: ['rgb(255, 51, 0)'],
-                                                                        borderWidth: 2,
-                                                                        pointRadius: 0
-                                                                    },
-
-                                                                    {
-                                                                        label: 'Humidity_MAX',
-                                                                        data: [<?php echo $s_max; ?>],
-                                                                        backgroundColor: ['rgba(0, 0, 0, 0)'],
-                                                                        borderColor: ['rgb(0, 82, 204)'],
-                                                                        borderWidth: 2,
-                                                                        pointRadius: 0
-                                                                    },
-
-                                                                    {
-                                                                        label: 'Humidity_MIN',
-                                                                        data: [<?php echo $s_min; ?>],
-                                                                        backgroundColor: ['rgba(0, 0, 0, 0)'],
-                                                                        borderColor: ['rgb(26, 117, 255)'],
-                                                                        borderWidth: 2,
-                                                                        pointRadius: 0
-                                                                    }
-                                                                ]
-                                                            },
-
-                                                            options: {
-                                                                scales: {
-                                                                    yAxes: [{
-                                                                        ticks: {
-                                                                            beginAtZero: true
-                                                                        }
-                                                                    }]
-                                                                }
-                                                            }
-                                                        });
-                                                    </script>
                                                 </div>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
 
-                            </div>
+                                                <script>
+                                                    var ctx = document.getElementById("myChart").getContext('2d');
+                                                    var myChart = new Chart(ctx, {
+                                                        type: 'line',
+                                                        data: {
+                                                            labels: <?php echo json_encode($timeData); ?>,
+                                                            datasets: [{
+                                                                label: '<?php echo $selectedType; ?>',
+                                                                data: <?php echo json_encode($valueData); ?>,
+                                                                backgroundColor: ['rgba(0, 0, 0, 0)'],
+                                                                borderColor: ['rgba(0,191,255,1)'],
+                                                                borderWidth: 2,
+                                                            }]
+                                                        },
+
+                                                        options: {
+                                                            scales: {
+                                                                yAxes: [{
+                                                                    ticks: {
+                                                                        beginAtZero: true
+                                                                    }
+                                                                }]
+                                                            }
+                                                        }
+                                                    });
+                                                </script>
+
+                                            </div>
+                                        <?php } else { ?>
+                                            <div class="col-12">
+                                                <div class="alert alert-danger" role="alert">
+                                                    <b>Results</b> from <?= $_GET['search_date_start'] ?> time <?= $_GET['time_start_search'] ?> to <?= $_GET['time_end_search'] ?>
+                                                </div>
+                                                <div class="jumbotron jumbotron-fluid">
+                                                    <div class="container">
+                                                        <h5 class="display-9 text-center">No data found</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } //close else 
+                                        ?>
+                                    <?php }  //close if all 
+                                    ?>
+                                <?php } //close if check search = ok 
+                                ?>
+
+                            </div> <!-- close box boydy -->
+
                         </div>
                     </div>
                 </div>
-           
-            <?php } ?>
-            </section>
-            <!-- /.content -->
         </div>
-        <!-- /.content-wrapper -->
 
-        <!-- Main Footer -->
-        <?php include("footer.php"); ?>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    <?php include("footer.php"); ?>
     </div>
     <!-- ./wrapper -->
 
