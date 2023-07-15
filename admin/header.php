@@ -15,5 +15,5 @@
     <link rel="stylesheet" href="../css/AdminLTE.min.css">
     <link rel="stylesheet" href="../css/_all-skins.min.css">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" type="image/x-icon" href="../Logo.png">
+    <link rel="icon" type="image/x-icon" href="../igt.png">
     
